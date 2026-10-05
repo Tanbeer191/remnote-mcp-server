@@ -613,4 +613,159 @@ export const FALLBACK_TOOLS = [
       description: 'Provide exactly one of tableRemId or tableTitle.',
     },
   },
+  {
+    name: 'remnote_attach_pdf',
+    description:
+      'Attach an already-uploaded PDF to a document the way RemNote does: creates a PDF Rem (Uploaded File powerup with URL and name) in "Uploaded Files" and adds it to the document\'s Sources. Dry-run by default.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        documentRemId: {
+          type: 'string',
+          description: 'Document Rem that should show the PDF',
+        },
+        url: {
+          type: 'string',
+          description: 'https URL of the uploaded PDF',
+        },
+        fileName: {
+          type: 'string',
+          description: 'Display name for the PDF Rem',
+        },
+        uploadsFolderRemId: {
+          type: 'string',
+          description: 'Folder for the PDF Rem (default: top-level "Uploaded Files")',
+        },
+        dryRun: {
+          type: 'boolean',
+          description:
+            'Preview only (default true). Set false to apply after reviewing the preview.',
+        },
+      },
+      required: ['documentRemId', 'url', 'fileName'],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'remnote_add_source',
+    description: "Add a Rem to another Rem's Sources list (e.g. link a paper note to its PDF Rem).",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        remId: {
+          type: 'string',
+          description: 'Rem whose sources change',
+        },
+        sourceRemId: {
+          type: 'string',
+          description: 'Source Rem to add',
+        },
+      },
+      required: ['remId', 'sourceRemId'],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'remnote_remove_source',
+    description: "Remove a Rem from another Rem's Sources list.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        remId: {
+          type: 'string',
+          description: 'Rem whose sources change',
+        },
+        sourceRemId: {
+          type: 'string',
+          description: 'Source Rem to remove',
+        },
+      },
+      required: ['remId', 'sourceRemId'],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'remnote_get_sources',
+    description: "List a Rem's Sources, with the file URL for uploaded PDFs.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        remId: {
+          type: 'string',
+          description: 'Rem to read',
+        },
+      },
+      required: ['remId'],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'remnote_set_folder_status',
+    description: 'Make a Rem a folder (or not). Dry-run by default.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        remId: {
+          type: 'string',
+          description: 'Rem to change',
+        },
+        isFolder: {
+          type: 'boolean',
+          description: 'true = folder',
+        },
+        dryRun: {
+          type: 'boolean',
+          description:
+            'Preview only (default true). Set false to apply after reviewing the preview.',
+        },
+      },
+      required: ['remId', 'isFolder'],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'remnote_delete_note',
+    description:
+      'Delete a Rem and all its descendants. Requires the bridge "Accept replace operation" setting. Always run the dry-run first, show the user the title and descendant count, and only then call again with dryRun=false and expectedTitle.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        remId: {
+          type: 'string',
+          description: 'Rem to delete',
+        },
+        dryRun: {
+          type: 'boolean',
+          description:
+            'Preview only (default true). Set false to apply after reviewing the preview.',
+        },
+        expectedTitle: {
+          type: 'string',
+          description: 'Required when dryRun=false: exact title from the dry-run',
+        },
+      },
+      required: ['remId'],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'remnote_get_cards',
+    description:
+      "Read a Rem's own flashcards: card IDs, type, next due time, whether due now, last review time, review count, last score (0 again, 0.5 hard, 1 good, 1.5 easy, 4 manual date), wrong-in-a-row.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        remId: {
+          type: 'string',
+          description: 'Rem whose cards to read',
+        },
+        includeHistory: {
+          type: 'boolean',
+          description: 'Include full repetition history',
+        },
+      },
+      required: ['remId'],
+      additionalProperties: false,
+    },
+  },
 ];

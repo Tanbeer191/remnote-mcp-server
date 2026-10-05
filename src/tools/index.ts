@@ -17,6 +17,7 @@ import { SetPropertySchema } from '../schemas/remnote-schemas.js';
 import { AppendJournalSchema } from '../schemas/remnote-schemas.js';
 import { ReadTableSchema } from '../schemas/remnote-schemas.js';
 import { checkVersionCompatibility } from '../version-compat.js';
+import { STUDY_TOOLS, STUDY_TOOL_ROUTES } from './study-tools.js';
 import type { Logger } from '../logger.js';
 import { parseMediaLocator, resolveManagedImage } from '../media.js';
 
@@ -1345,6 +1346,7 @@ export const ALL_TOOLS = [
   PLAYBOOK_TOOL,
   STATUS_TOOL,
   READ_TABLE_TOOL,
+  ...STUDY_TOOLS,
 ] as const;
 
 export function registerAllTools(
@@ -1612,8 +1614,15 @@ export function registerAllTools(
           break;
         }
 
-        default:
-          throw new Error(`Unknown tool: ${toolName}`);
+        default: {
+          const route = STUDY_TOOL_ROUTES[toolName];
+          if (!route) {
+            throw new Error(`Unknown tool: ${toolName}`);
+          }
+          const [action, schema] = route;
+          const args = schema.parse(request.params.arguments) as Record<string, unknown>;
+          result = await wsServer.sendRequest(action, args);
+        }
       }
 
       toolLogger.debug(
