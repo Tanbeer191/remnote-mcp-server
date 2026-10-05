@@ -768,4 +768,58 @@ export const FALLBACK_TOOLS = [
       additionalProperties: false,
     },
   },
+  {
+    name: 'remnote_get_document_appearance',
+    description:
+      "Read a document/folder's icon (folder colour SVG path or emoji), Hide Bullets and Full Width settings.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        remId: {
+          type: 'string',
+          description: 'Rem to read',
+        },
+      },
+      required: ['remId'],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'remnote_set_document_appearance',
+    description:
+      "Set a document/folder's folder icon colour (or raw icon/emoji), Hide Bullets (no-bullet document) and/or Full Width. Dry-run by default; the result reads values back after writing.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        remId: {
+          type: 'string',
+          description: 'Rem to change',
+        },
+        folderColour: {
+          type: 'string',
+          description:
+            'Folder icon colour: yellow, yellow-light, green, green-light, blue, blue-light, purple, purple-light, red, red-light',
+        },
+        bulletIcon: {
+          type: 'string',
+          description: 'Raw icon value (emoji or icon path)',
+        },
+        hideBullets: {
+          type: 'boolean',
+          description: 'true = no bullets',
+        },
+        fullWidth: {
+          type: 'boolean',
+          description: 'Full-width layout',
+        },
+        dryRun: {
+          type: 'boolean',
+          description:
+            'Preview only (default true). Set false to apply after reviewing the preview.',
+        },
+      },
+      required: ['remId'],
+      additionalProperties: false,
+    },
+  },
 ];

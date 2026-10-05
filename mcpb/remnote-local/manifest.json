@@ -115,6 +115,14 @@
     {
       "name": "remnote_get_cards",
       "description": "Read a Rem's own flashcards: card IDs, type, next due time, whether due now, last review time, review count, last score (0 again, 0.5 hard, 1 good, 1.5 easy, 4 manual date), wrong-in-a-row."
+    },
+    {
+      "name": "remnote_get_document_appearance",
+      "description": "Read a document/folder's icon (folder colour SVG path or emoji), Hide Bullets and Full Width settings."
+    },
+    {
+      "name": "remnote_set_document_appearance",
+      "description": "Set a document/folder's folder icon colour (or raw icon/emoji), Hide Bullets (no-bullet document) and/or Full Width. Dry-run by default; the result reads values back after writing."
     }
   ],
   "tools_generated": true,

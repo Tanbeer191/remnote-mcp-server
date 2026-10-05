@@ -69,4 +69,19 @@ describe('study tools', () => {
     const result = await call('remnote_get_cards', { remId: 'n1', extra: 1 });
     expect(result.isError).toBe(true);
   });
+
+  it('forwards set_document_appearance as a dry run and validates folderColour', async () => {
+    const { call, sendRequest } = setup();
+    await call('remnote_set_document_appearance', { remId: 'f1', folderColour: 'yellow' });
+    expect(sendRequest).toHaveBeenLastCalledWith('set_document_appearance', {
+      remId: 'f1',
+      folderColour: 'yellow',
+      dryRun: true,
+    });
+    const bad = await call('remnote_set_document_appearance', {
+      remId: 'f1',
+      folderColour: 'pink',
+    });
+    expect(bad.isError).toBe(true);
+  });
 });

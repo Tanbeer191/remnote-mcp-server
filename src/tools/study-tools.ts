@@ -66,6 +66,43 @@ export const GetCardsSchema = z
   })
   .strict();
 
+const FOLDER_COLOURS = [
+  'yellow',
+  'yellow-light',
+  'green',
+  'green-light',
+  'blue',
+  'blue-light',
+  'purple',
+  'purple-light',
+  'red',
+  'red-light',
+] as const;
+
+export const GetDocumentAppearanceSchema = z
+  .object({
+    remId: remId('Document or folder Rem to read'),
+  })
+  .strict();
+
+export const SetDocumentAppearanceSchema = z
+  .object({
+    remId: remId('Document or folder Rem to change'),
+    folderColour: z
+      .enum(FOLDER_COLOURS)
+      .optional()
+      .describe('Folder icon colour shortcut (sets the Bullet Icon to that folder SVG)'),
+    bulletIcon: z
+      .string()
+      .min(1)
+      .optional()
+      .describe('Raw icon value: emoji or icon path; use folderColour for folders'),
+    hideBullets: z.boolean().optional().describe('true = no-bullet document, false = bulleted'),
+    fullWidth: z.boolean().optional().describe('Full-width document layout'),
+    dryRun,
+  })
+  .strict();
+
 const props = (shape: Record<string, unknown>, required: string[]) => ({
   type: 'object' as const,
   properties: shape,
@@ -163,6 +200,36 @@ export const STUDY_TOOLS = [
       ['remId']
     ),
   },
+  {
+    name: 'remnote_get_document_appearance',
+    description:
+      "Read a document/folder's icon (folder colour SVG path or emoji), Hide Bullets and Full Width settings.",
+    inputSchema: props(
+      {
+        remId: { type: 'string', description: 'Rem to read' },
+      },
+      ['remId']
+    ),
+  },
+  {
+    name: 'remnote_set_document_appearance',
+    description:
+      "Set a document/folder's folder icon colour (or raw icon/emoji), Hide Bullets (no-bullet document) and/or Full Width. Dry-run by default; the result reads values back after writing.",
+    inputSchema: props(
+      {
+        remId: { type: 'string', description: 'Rem to change' },
+        folderColour: {
+          type: 'string',
+          description: `Folder icon colour: ${FOLDER_COLOURS.join(', ')}`,
+        },
+        bulletIcon: { type: 'string', description: 'Raw icon value (emoji or icon path)' },
+        hideBullets: { type: 'boolean', description: 'true = no bullets' },
+        fullWidth: { type: 'boolean', description: 'Full-width layout' },
+        dryRun: DRY_RUN_PROP,
+      },
+      ['remId']
+    ),
+  },
 ];
 
 /** Tool name -> [bridge action, argument schema]. */
@@ -174,4 +241,6 @@ export const STUDY_TOOL_ROUTES: Record<string, [string, z.ZodTypeAny]> = {
   remnote_set_folder_status: ['set_folder_status', SetFolderStatusSchema],
   remnote_delete_note: ['delete_note', DeleteNoteSchema],
   remnote_get_cards: ['get_cards', GetCardsSchema],
+  remnote_get_document_appearance: ['get_document_appearance', GetDocumentAppearanceSchema],
+  remnote_set_document_appearance: ['set_document_appearance', SetDocumentAppearanceSchema],
 };

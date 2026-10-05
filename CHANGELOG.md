@@ -9,9 +9,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- (Fork: Tanbeer191) Seven study-workflow MCP tools in `src/tools/study-tools.ts`, each forwarding to the bridge action
+- (Fork: Tanbeer191) Nine study-workflow MCP tools in `src/tools/study-tools.ts`, each forwarding to the bridge action
   of the same name: `remnote_attach_pdf`, `remnote_add_source`, `remnote_remove_source`, `remnote_get_sources`,
-  `remnote_set_folder_status`, `remnote_delete_note`, `remnote_get_cards`. Requires the
+  `remnote_set_folder_status`, `remnote_delete_note`, `remnote_get_cards`, `remnote_get_document_appearance`,
+  `remnote_set_document_appearance` (folder icon colour, Hide Bullets, Full Width). Requires the
   matching forked bridge. No bundled `remnote-cli` parity yet: these are for MCP-driven study workflows; add CLI
   commands if a script needs them.
 
