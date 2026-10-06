@@ -103,6 +103,19 @@ export const SetDocumentAppearanceSchema = z
   })
   .strict();
 
+export const CreateTableSchema = z
+  .object({
+    parentRemId: remId('Rem to create the table under'),
+    columns: z.array(z.string().min(1)).min(1).describe('Header row, left to right'),
+    rows: z
+      .array(z.array(z.string()))
+      .optional()
+      .describe('Body rows: one array of cell texts per row, left to right'),
+    position: z.enum(['first', 'last']).default('last').describe('Place under the parent'),
+    dryRun,
+  })
+  .strict();
+
 const props = (shape: Record<string, unknown>, required: string[]) => ({
   type: 'object' as const,
   properties: shape,
@@ -230,6 +243,29 @@ export const STUDY_TOOLS = [
       ['remId']
     ),
   },
+  {
+    name: 'remnote_create_table',
+    description:
+      'Create a simple table (the grid /table makes) under a parent, from a header row and body rows of cell text. Cell text is Markdown (e.g. **bold**); pipes and line breaks are escaped. Dry-run by default; the preview shows the Markdown sent.',
+    inputSchema: props(
+      {
+        parentRemId: { type: 'string', description: 'Rem to create the table under' },
+        columns: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Header row, left to right',
+        },
+        rows: {
+          type: 'array',
+          items: { type: 'array', items: { type: 'string' } },
+          description: 'Body rows: one array of cell texts per row',
+        },
+        position: { type: 'string', enum: ['first', 'last'], description: 'Default last' },
+        dryRun: DRY_RUN_PROP,
+      },
+      ['parentRemId', 'columns']
+    ),
+  },
 ];
 
 /** Tool name -> [bridge action, argument schema]. */
@@ -243,4 +279,5 @@ export const STUDY_TOOL_ROUTES: Record<string, [string, z.ZodTypeAny]> = {
   remnote_get_cards: ['get_cards', GetCardsSchema],
   remnote_get_document_appearance: ['get_document_appearance', GetDocumentAppearanceSchema],
   remnote_set_document_appearance: ['set_document_appearance', SetDocumentAppearanceSchema],
+  remnote_create_table: ['create_table', CreateTableSchema],
 };

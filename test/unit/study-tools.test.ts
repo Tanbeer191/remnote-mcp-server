@@ -84,4 +84,21 @@ describe('study tools', () => {
     });
     expect(bad.isError).toBe(true);
   });
+  it('forwards create_table as a dry run with defaults and rejects empty columns', async () => {
+    const { call, sendRequest } = setup();
+    await call('remnote_create_table', {
+      parentRemId: 'p1',
+      columns: ['Drug', 'Target'],
+      rows: [['Linaclotide', 'GC-C agonist']],
+    });
+    expect(sendRequest).toHaveBeenLastCalledWith('create_table', {
+      parentRemId: 'p1',
+      columns: ['Drug', 'Target'],
+      rows: [['Linaclotide', 'GC-C agonist']],
+      position: 'last',
+      dryRun: true,
+    });
+    const bad = await call('remnote_create_table', { parentRemId: 'p1', columns: [] });
+    expect(bad.isError).toBe(true);
+  });
 });

@@ -123,6 +123,10 @@
     {
       "name": "remnote_set_document_appearance",
       "description": "Set a document/folder's folder icon colour (or raw icon/emoji), Hide Bullets (no-bullet document) and/or Full Width. Dry-run by default; the result reads values back after writing."
+    },
+    {
+      "name": "remnote_create_table",
+      "description": "Create a simple table (the grid /table makes) under a parent, from a header row and body rows of cell text. Cell text is Markdown (e.g. **bold**); pipes and line breaks are escaped. Dry-run by default; the preview shows the Markdown sent."
     }
   ],
   "tools_generated": true,

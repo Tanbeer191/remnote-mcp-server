@@ -15,6 +15,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   `remnote_set_document_appearance` (folder icon colour, Hide Bullets, Full Width). Requires the
   matching forked bridge. No bundled `remnote-cli` parity yet: these are for MCP-driven study workflows; add CLI
   commands if a script needs them.
+- (Fork) `remnote_create_table`: create a simple table (the grid `/table` makes) under a parent from a header row and
+  body rows. Dry-run by default; the preview shows the Markdown sent. Requires the matching forked bridge.
 
 - Add real RemNote alias writes through `remnote_create_note`, `remnote_update_note`, `remnote-cli create`, and
   `remnote-cli update`, with normalization, idempotency, exact removal, Unicode preservation, and MCP/MCPB/CLI parity.

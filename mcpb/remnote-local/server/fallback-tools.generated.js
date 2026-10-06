@@ -822,4 +822,47 @@ export const FALLBACK_TOOLS = [
       additionalProperties: false,
     },
   },
+  {
+    name: 'remnote_create_table',
+    description:
+      'Create a simple table (the grid /table makes) under a parent, from a header row and body rows of cell text. Cell text is Markdown (e.g. **bold**); pipes and line breaks are escaped. Dry-run by default; the preview shows the Markdown sent.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        parentRemId: {
+          type: 'string',
+          description: 'Rem to create the table under',
+        },
+        columns: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+          description: 'Header row, left to right',
+        },
+        rows: {
+          type: 'array',
+          items: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+          },
+          description: 'Body rows: one array of cell texts per row',
+        },
+        position: {
+          type: 'string',
+          enum: ['first', 'last'],
+          description: 'Default last',
+        },
+        dryRun: {
+          type: 'boolean',
+          description:
+            'Preview only (default true). Set false to apply after reviewing the preview.',
+        },
+      },
+      required: ['parentRemId', 'columns'],
+      additionalProperties: false,
+    },
+  },
 ];

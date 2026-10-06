@@ -506,7 +506,7 @@ describe('Tool Registration', () => {
       tools: unknown[];
     };
 
-    expect(result.tools).toHaveLength(26);
+    expect(result.tools).toHaveLength(27);
   });
 
   it('should include all tool names in list', async () => {
