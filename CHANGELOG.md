@@ -17,6 +17,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   commands if a script needs them.
 - (Fork) `remnote_create_table`: create a simple table (the grid `/table` makes) under a parent from a header row and
   body rows. Dry-run by default; the preview shows the Markdown sent. Requires the matching forked bridge.
+- (Fork) `remnote_create_pdf_highlight`: create a text highlight on an uploaded PDF in the layout RemNote's PDF viewer
+  uses (PDF -> Highlights -> Page NN -> highlight with PDF Highlight and Highlight powerups). Reference the returned
+  highlight in a note to link that note to the place in the PDF. Dry-run by default. Requires the matching forked bridge.
 
 - Add real RemNote alias writes through `remnote_create_note`, `remnote_update_note`, `remnote-cli create`, and
   `remnote-cli update`, with normalization, idempotency, exact removal, Unicode preservation, and MCP/MCPB/CLI parity.

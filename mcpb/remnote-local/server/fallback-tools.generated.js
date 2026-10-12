@@ -865,4 +865,77 @@ export const FALLBACK_TOOLS = [
       additionalProperties: false,
     },
   },
+  {
+    name: 'remnote_create_pdf_highlight',
+    description:
+      "Create a text highlight on an uploaded PDF, stored the way RemNote's PDF viewer stores one (PDF -> Highlights -> Page NN -> highlight). Reference the returned highlightRemId in a note as [[id:<highlightRemId>]] to link that note to the place in the PDF. Box coordinates are PDF points from the page's top-left, e.g. from pdftotext -bbox. Dry-run by default.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        pdfRemId: {
+          type: 'string',
+          description: 'PDF Rem (Uploaded File)',
+        },
+        pageNumber: {
+          type: 'integer',
+          minimum: 1,
+          description: '1-based page number',
+        },
+        text: {
+          type: 'string',
+          description: 'Highlighted text',
+        },
+        rects: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              x1: {
+                type: 'number',
+              },
+              y1: {
+                type: 'number',
+              },
+              x2: {
+                type: 'number',
+              },
+              y2: {
+                type: 'number',
+              },
+            },
+            required: ['x1', 'y1', 'x2', 'y2'],
+            additionalProperties: false,
+          },
+          description: 'Boxes around the text, PDF points from top-left',
+        },
+        pageWidth: {
+          type: 'number',
+          description: 'Page width in PDF points',
+        },
+        pageHeight: {
+          type: 'number',
+          description: 'Page height in PDF points',
+        },
+        textBefore: {
+          type: 'string',
+          description: 'Optional text just before the highlight',
+        },
+        textAfter: {
+          type: 'string',
+          description: 'Optional text just after the highlight',
+        },
+        color: {
+          type: 'string',
+          description: 'Highlight colour, default Yellow',
+        },
+        dryRun: {
+          type: 'boolean',
+          description:
+            'Preview only (default true). Set false to apply after reviewing the preview.',
+        },
+      },
+      required: ['pdfRemId', 'pageNumber', 'text', 'rects', 'pageWidth', 'pageHeight'],
+      additionalProperties: false,
+    },
+  },
 ];

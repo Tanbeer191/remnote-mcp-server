@@ -101,4 +101,19 @@ describe('study tools', () => {
     const bad = await call('remnote_create_table', { parentRemId: 'p1', columns: [] });
     expect(bad.isError).toBe(true);
   });
+  it('forwards create_pdf_highlight as a dry run and rejects bad pages', async () => {
+    const { call, sendRequest } = setup();
+    const args = {
+      pdfRemId: 'pdf1',
+      pageNumber: 13,
+      text: 'Consensus model',
+      rects: [{ x1: 1, y1: 2, x2: 3, y2: 4 }],
+      pageWidth: 720,
+      pageHeight: 540,
+    };
+    await call('remnote_create_pdf_highlight', args);
+    expect(sendRequest).toHaveBeenLastCalledWith('create_pdf_highlight', { ...args, dryRun: true });
+    const bad = await call('remnote_create_pdf_highlight', { ...args, pageNumber: 0 });
+    expect(bad.isError).toBe(true);
+  });
 });
