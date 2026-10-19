@@ -20,6 +20,13 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - (Fork) `remnote_create_pdf_highlight`: create a text highlight on an uploaded PDF in the layout RemNote's PDF viewer
   uses (PDF -> Highlights -> Page NN -> highlight with PDF Highlight and Highlight powerups). Reference the returned
   highlight in a note to link that note to the place in the PDF. Dry-run by default. Requires the matching forked bridge.
+- (Fork) `remnote_create_pdf_highlight` now creates highlights with no colour in the editor by default (`colorInEditor:
+  false`, like RemNote's "No Color in Editor"), so references show underlined. New `remnote_set_pdf_highlight_color`
+  turns an existing highlight's editor colour off or on. Dry-run by default. Requires the matching forked bridge.
+- (Fork) `remnote_set_table_card_columns`: turn table flashcards on or off per column (direction per column, cells
+  included in practice, table marked as making cards). `remnote_set_collapsed`: collapse or expand a Rem in a given
+  view. `remnote_create_table` gains `blankRowNames` for reverse tables. Dry-run by default. Requires the matching forked
+  bridge.
 
 - Add real RemNote alias writes through `remnote_create_note`, `remnote_update_note`, `remnote-cli create`, and
   `remnote-cli update`, with normalization, idempotency, exact removal, Unicode preservation, and MCP/MCPB/CLI parity.

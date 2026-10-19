@@ -855,6 +855,11 @@ export const FALLBACK_TOOLS = [
           enum: ['first', 'last'],
           description: 'Default last',
         },
+        blankRowNames: {
+          type: 'boolean',
+          description:
+            'Add an empty row-name column so every given column is a property column (RemNote cannot make cards from the row-name column); use for reverse tables',
+        },
         dryRun: {
           type: 'boolean',
           description:
@@ -862,6 +867,64 @@ export const FALLBACK_TOOLS = [
         },
       },
       required: ['parentRemId', 'columns'],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'remnote_set_table_card_columns',
+    description:
+      "Turn table flashcards on or off per column, as RemNote's table card settings do: sets the column's card direction (forward, backward, both, none), includes or excludes each cell in that column from practice, and marks the table as making cards. Columns not listed are unchanged. The row-name column cannot make cards. Dry-run by default.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        tableRemId: {
+          type: 'string',
+          description: 'Table Rem (from create_table)',
+        },
+        columns: {
+          type: 'object',
+          additionalProperties: {
+            type: 'string',
+            enum: ['forward', 'backward', 'both', 'none'],
+          },
+          description: 'Column header text -> card direction, e.g. {"Disease": "forward"}',
+        },
+        dryRun: {
+          type: 'boolean',
+          description:
+            'Preview only (default true). Set false to apply after reviewing the preview.',
+        },
+      },
+      required: ['tableRemId', 'columns'],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'remnote_set_collapsed',
+    description:
+      "Collapse or expand a Rem's children as shown in a given document or portal (RemNote stores collapse state per view). Dry-run by default.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        remId: {
+          type: 'string',
+          description: 'Rem to collapse or expand',
+        },
+        collapsed: {
+          type: 'boolean',
+          description: 'true = collapse',
+        },
+        portalId: {
+          type: 'string',
+          description: 'Document or portal the Rem is shown in',
+        },
+        dryRun: {
+          type: 'boolean',
+          description:
+            'Preview only (default true). Set false to apply after reviewing the preview.',
+        },
+      },
+      required: ['remId', 'collapsed', 'portalId'],
       additionalProperties: false,
     },
   },
@@ -924,9 +987,14 @@ export const FALLBACK_TOOLS = [
           type: 'string',
           description: 'Optional text just after the highlight',
         },
+        colorInEditor: {
+          type: 'boolean',
+          description:
+            "Show the colour where notes reference it (default false: underlined, like RemNote's No Color in Editor; the PDF shows the default colour)",
+        },
         color: {
           type: 'string',
-          description: 'Highlight colour, default Yellow',
+          description: 'Colour when colorInEditor is true, default Yellow',
         },
         dryRun: {
           type: 'boolean',
@@ -935,6 +1003,35 @@ export const FALLBACK_TOOLS = [
         },
       },
       required: ['pdfRemId', 'pageNumber', 'text', 'rects', 'pageWidth', 'pageHeight'],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'remnote_set_pdf_highlight_color',
+    description:
+      "Turn a PDF highlight's colour in the editor off (RemNote's No Color in Editor: notes referencing it show it underlined; the PDF keeps the highlight) or on with a colour. Dry-run by default.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        remId: {
+          type: 'string',
+          description: 'PDF highlight Rem',
+        },
+        colorInEditor: {
+          type: 'boolean',
+          description: 'false = underlined in notes; true = coloured',
+        },
+        color: {
+          type: 'string',
+          description: 'Colour when colorInEditor is true, default Yellow',
+        },
+        dryRun: {
+          type: 'boolean',
+          description:
+            'Preview only (default true). Set false to apply after reviewing the preview.',
+        },
+      },
+      required: ['remId', 'colorInEditor'],
       additionalProperties: false,
     },
   },

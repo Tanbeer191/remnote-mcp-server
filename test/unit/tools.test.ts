@@ -499,14 +499,14 @@ describe('Tool Registration', () => {
     expect(mockServer.hasHandler(ListToolsRequestSchema)).toBe(true);
   });
 
-  it('should return all 28 tools in list (17 upstream + 11 study tools)', async () => {
+  it('should return all 31 tools in list (17 upstream + 14 study tools)', async () => {
     registerAllTools(mockServer as never, mockWsServer as never, createMockLogger());
 
     const result = (await mockServer.callHandler(ListToolsRequestSchema, {})) as {
       tools: unknown[];
     };
 
-    expect(result.tools).toHaveLength(28);
+    expect(result.tools).toHaveLength(31);
   });
 
   it('should include all tool names in list', async () => {

@@ -129,8 +129,20 @@
       "description": "Create a simple table (the grid /table makes) under a parent, from a header row and body rows of cell text. Cell text is Markdown (e.g. **bold**); pipes and line breaks are escaped. Dry-run by default; the preview shows the Markdown sent."
     },
     {
+      "name": "remnote_set_table_card_columns",
+      "description": "Turn table flashcards on or off per column, as RemNote's table card settings do: sets the column's card direction (forward, backward, both, none), includes or excludes each cell in that column from practice, and marks the table as making cards. Columns not listed are unchanged. The row-name column cannot make cards. Dry-run by default."
+    },
+    {
+      "name": "remnote_set_collapsed",
+      "description": "Collapse or expand a Rem's children as shown in a given document or portal (RemNote stores collapse state per view). Dry-run by default."
+    },
+    {
       "name": "remnote_create_pdf_highlight",
       "description": "Create a text highlight on an uploaded PDF, stored the way RemNote's PDF viewer stores one (PDF -> Highlights -> Page NN -> highlight). Reference the returned highlightRemId in a note as [[id:<highlightRemId>]] to link that note to the place in the PDF. Box coordinates are PDF points from the page's top-left, e.g. from pdftotext -bbox. Dry-run by default."
+    },
+    {
+      "name": "remnote_set_pdf_highlight_color",
+      "description": "Turn a PDF highlight's colour in the editor off (RemNote's No Color in Editor: notes referencing it show it underlined; the PDF keeps the highlight) or on with a colour. Dry-run by default."
     }
   ],
   "tools_generated": true,

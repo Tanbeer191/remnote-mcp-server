@@ -112,6 +112,31 @@ export const CreateTableSchema = z
       .optional()
       .describe('Body rows: one array of cell texts per row, left to right'),
     position: z.enum(['first', 'last']).default('last').describe('Place under the parent'),
+    blankRowNames: z
+      .boolean()
+      .optional()
+      .describe('Add an empty row-name column so every given column can make flashcards'),
+    dryRun,
+  })
+  .strict();
+
+const direction = z.enum(['forward', 'backward', 'both', 'none']);
+export const SetTableCardColumnsSchema = z
+  .object({
+    tableRemId: remId('Table Rem (from create_table)'),
+    columns: z
+      .record(z.string().min(1), direction)
+      .refine((c) => Object.keys(c).length > 0, 'Name at least one column')
+      .describe('Column header text -> card direction'),
+    dryRun,
+  })
+  .strict();
+
+export const SetCollapsedSchema = z
+  .object({
+    remId: remId('Rem to collapse or expand'),
+    collapsed: z.boolean(),
+    portalId: remId('Document or portal the Rem is shown in'),
     dryRun,
   })
   .strict();
@@ -138,7 +163,32 @@ export const CreatePdfHighlightSchema = z
     pageHeight: z.number().positive().describe('Page height in PDF points'),
     textBefore: z.string().optional(),
     textAfter: z.string().optional(),
-    color: z.string().min(1).optional().describe('Highlight colour, default Yellow'),
+    colorInEditor: z
+      .boolean()
+      .default(false)
+      .describe(
+        'Show the colour where notes reference it; false = underlined (No Color in Editor)'
+      ),
+    color: z
+      .string()
+      .min(1)
+      .optional()
+      .describe('Colour when colorInEditor is true, default Yellow'),
+    dryRun,
+  })
+  .strict();
+
+export const SetPdfHighlightColorSchema = z
+  .object({
+    remId: remId('PDF highlight Rem'),
+    colorInEditor: z
+      .boolean()
+      .describe('false = No Color in Editor (references underlined); true = coloured'),
+    color: z
+      .string()
+      .min(1)
+      .optional()
+      .describe('Colour when colorInEditor is true, default Yellow'),
     dryRun,
   })
   .strict();
@@ -288,9 +338,45 @@ export const STUDY_TOOLS = [
           description: 'Body rows: one array of cell texts per row',
         },
         position: { type: 'string', enum: ['first', 'last'], description: 'Default last' },
+        blankRowNames: {
+          type: 'boolean',
+          description:
+            'Add an empty row-name column so every given column is a property column (RemNote cannot make cards from the row-name column); use for reverse tables',
+        },
         dryRun: DRY_RUN_PROP,
       },
       ['parentRemId', 'columns']
+    ),
+  },
+  {
+    name: 'remnote_set_table_card_columns',
+    description:
+      "Turn table flashcards on or off per column, as RemNote's table card settings do: sets the column's card direction (forward, backward, both, none), includes or excludes each cell in that column from practice, and marks the table as making cards. Columns not listed are unchanged. The row-name column cannot make cards. Dry-run by default.",
+    inputSchema: props(
+      {
+        tableRemId: { type: 'string', description: 'Table Rem (from create_table)' },
+        columns: {
+          type: 'object',
+          additionalProperties: { type: 'string', enum: ['forward', 'backward', 'both', 'none'] },
+          description: 'Column header text -> card direction, e.g. {"Disease": "forward"}',
+        },
+        dryRun: DRY_RUN_PROP,
+      },
+      ['tableRemId', 'columns']
+    ),
+  },
+  {
+    name: 'remnote_set_collapsed',
+    description:
+      "Collapse or expand a Rem's children as shown in a given document or portal (RemNote stores collapse state per view). Dry-run by default.",
+    inputSchema: props(
+      {
+        remId: { type: 'string', description: 'Rem to collapse or expand' },
+        collapsed: { type: 'boolean', description: 'true = collapse' },
+        portalId: { type: 'string', description: 'Document or portal the Rem is shown in' },
+        dryRun: DRY_RUN_PROP,
+      },
+      ['remId', 'collapsed', 'portalId']
     ),
   },
   {
@@ -321,10 +407,32 @@ export const STUDY_TOOLS = [
         pageHeight: { type: 'number', description: 'Page height in PDF points' },
         textBefore: { type: 'string', description: 'Optional text just before the highlight' },
         textAfter: { type: 'string', description: 'Optional text just after the highlight' },
-        color: { type: 'string', description: 'Highlight colour, default Yellow' },
+        colorInEditor: {
+          type: 'boolean',
+          description:
+            "Show the colour where notes reference it (default false: underlined, like RemNote's No Color in Editor; the PDF shows the default colour)",
+        },
+        color: { type: 'string', description: 'Colour when colorInEditor is true, default Yellow' },
         dryRun: DRY_RUN_PROP,
       },
       ['pdfRemId', 'pageNumber', 'text', 'rects', 'pageWidth', 'pageHeight']
+    ),
+  },
+  {
+    name: 'remnote_set_pdf_highlight_color',
+    description:
+      "Turn a PDF highlight's colour in the editor off (RemNote's No Color in Editor: notes referencing it show it underlined; the PDF keeps the highlight) or on with a colour. Dry-run by default.",
+    inputSchema: props(
+      {
+        remId: { type: 'string', description: 'PDF highlight Rem' },
+        colorInEditor: {
+          type: 'boolean',
+          description: 'false = underlined in notes; true = coloured',
+        },
+        color: { type: 'string', description: 'Colour when colorInEditor is true, default Yellow' },
+        dryRun: DRY_RUN_PROP,
+      },
+      ['remId', 'colorInEditor']
     ),
   },
 ];
@@ -342,4 +450,7 @@ export const STUDY_TOOL_ROUTES: Record<string, [string, z.ZodTypeAny]> = {
   remnote_set_document_appearance: ['set_document_appearance', SetDocumentAppearanceSchema],
   remnote_create_table: ['create_table', CreateTableSchema],
   remnote_create_pdf_highlight: ['create_pdf_highlight', CreatePdfHighlightSchema],
+  remnote_set_table_card_columns: ['set_table_card_columns', SetTableCardColumnsSchema],
+  remnote_set_collapsed: ['set_collapsed', SetCollapsedSchema],
+  remnote_set_pdf_highlight_color: ['set_pdf_highlight_color', SetPdfHighlightColorSchema],
 };

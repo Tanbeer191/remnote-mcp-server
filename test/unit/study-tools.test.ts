@@ -112,8 +112,45 @@ describe('study tools', () => {
       pageHeight: 540,
     };
     await call('remnote_create_pdf_highlight', args);
-    expect(sendRequest).toHaveBeenLastCalledWith('create_pdf_highlight', { ...args, dryRun: true });
+    expect(sendRequest).toHaveBeenLastCalledWith('create_pdf_highlight', {
+      ...args,
+      colorInEditor: false,
+      dryRun: true,
+    });
     const bad = await call('remnote_create_pdf_highlight', { ...args, pageNumber: 0 });
     expect(bad.isError).toBe(true);
+  });
+  it('forwards set_pdf_highlight_color as a dry run and requires colorInEditor', async () => {
+    const { call, sendRequest } = setup();
+    await call('remnote_set_pdf_highlight_color', { remId: 'hl1', colorInEditor: false });
+    expect(sendRequest).toHaveBeenLastCalledWith('set_pdf_highlight_color', {
+      remId: 'hl1',
+      colorInEditor: false,
+      dryRun: true,
+    });
+    const bad = await call('remnote_set_pdf_highlight_color', { remId: 'hl1' });
+    expect(bad.isError).toBe(true);
+  });
+  it('forwards set_table_card_columns and set_collapsed as dry runs', async () => {
+    const { call, sendRequest } = setup();
+    await call('remnote_set_table_card_columns', {
+      tableRemId: 't1',
+      columns: { Disease: 'forward' },
+    });
+    expect(sendRequest).toHaveBeenLastCalledWith('set_table_card_columns', {
+      tableRemId: 't1',
+      columns: { Disease: 'forward' },
+      dryRun: true,
+    });
+    expect(
+      (await call('remnote_set_table_card_columns', { tableRemId: 't1', columns: {} })).isError
+    ).toBe(true);
+    await call('remnote_set_collapsed', { remId: 'b', collapsed: true, portalId: 'd' });
+    expect(sendRequest).toHaveBeenLastCalledWith('set_collapsed', {
+      remId: 'b',
+      collapsed: true,
+      portalId: 'd',
+      dryRun: true,
+    });
   });
 });
