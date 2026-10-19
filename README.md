@@ -5,6 +5,16 @@
 [![npm version](https://img.shields.io/npm/v/remnote-mcp-server)](https://www.npmjs.com/package/remnote-mcp-server)
 [![codecov](https://codecov.io/gh/robert7/remnote-mcp-server/branch/main/graph/badge.svg)](https://codecov.io/gh/robert7/remnote-mcp-server)
 
+> **Study-tools fork (Tanbeer191/remnote-mcp-server, branch `study-tools`).** This fork adds 14 MCP tools for
+> building lecture notes, PDF-linked notes and flashcard decks: attaching PDFs as sources, PDF highlights that notes
+> can link to, simple tables with per-column flashcards, folders and document appearance, collapsing, safe deletes and
+> reading card state. It needs the matching forked bridge plugin,
+> [Tanbeer191/remnote-mcp-bridge](https://github.com/Tanbeer191/remnote-mcp-bridge) (branch `study-tools`), run from
+> source; the Marketplace plugin does not have the added actions. Setup and every added tool:
+> **[docs/guides/study-tools-fork.md](docs/guides/study-tools-fork.md)**. Helper scripts for jobs the plugin API cannot
+> do (uploading PDFs, switching on table flashcards, due dates, snapshots, session reports):
+> **[tools/README.md](tools/README.md)**. Everything below is the upstream README.
+
 MCP server and CLI package that bridges AI agents, local scripts, and coding harnesses to
 [RemNote](https://remnote.com/) via the [RemNote Automation Bridge
 plugin](https://github.com/robert7/remnote-mcp-bridge).

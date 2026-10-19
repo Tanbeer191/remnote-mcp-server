@@ -11,6 +11,12 @@ Tools with an `outputSchema` return machine-readable data in MCP `structuredCont
 JSON in a top-level `content` text block for compatibility with older clients and transcripts. This follows the
 [MCP tools specification](https://modelcontextprotocol.io/specification/2025-11-25/server/tools).
 
+> **Study-tools fork:** the 14 tools this fork adds (`remnote_attach_pdf`, `remnote_add_source`,
+> `remnote_remove_source`, `remnote_get_sources`, `remnote_set_folder_status`, `remnote_delete_note`,
+> `remnote_get_cards`, `remnote_get_document_appearance`, `remnote_set_document_appearance`, `remnote_create_table`,
+> `remnote_set_table_card_columns`, `remnote_set_collapsed`, `remnote_create_pdf_highlight`,
+> `remnote_set_pdf_highlight_color`) are documented in [study-tools-fork.md](study-tools-fork.md).
+
 ## Tool Summary
 
 | Tool | Description | Use Case |
